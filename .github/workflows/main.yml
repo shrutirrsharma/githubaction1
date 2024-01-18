@@ -23,4 +23,8 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-     
+          
+      - name: Build .NET Backend
+        run: |
+          cd WEBAPIUPDATED\WebAPI
+          ls  # List contents to verify you are in the right directory
