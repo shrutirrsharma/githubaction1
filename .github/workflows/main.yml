@@ -41,6 +41,6 @@ jobs:
 
       - name: Build and Test Angular Frontend
         run: |
-          cd frontend
+          cd AngularCRUD
           npm run build
           npm test
