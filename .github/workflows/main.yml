@@ -33,3 +33,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          
+      - name: Install Dependencies
+        run: |
+          cd AngularCRUD
+          npm install
