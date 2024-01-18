@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "8002:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=password@12345#
+    networks:
+      - mynetwork
+    volumes:
+      - sql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "[ -x /opt/mssql-tools/bin/sqlcmd ] && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P password@12345# -d master -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'  # Adjust CPU shares as needed
+          memory: 2GB
+        reservations:
+          memory: 2GB # Adjust memory reservation as needed
+
+  webapi:
+    build:
+      context: ./WebAPI/WebAPI
+      dockerfile: Dockerfile
+    ports:
+      - "50306:80"
+    depends_on:
+      - sqlserver
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50306/"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '1'  # Adjust CPU shares as needed
+          memory: 2GB
+        reservations:
+          memory: 2GB  # Adjust memory reservation as needed
+
+  angularapp:
+    build:
+      context: ./AngularCRUD
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - webapi
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4200/"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '1'  # Adjust CPU shares as needed
+          memory: 2GB
+        reservations:
+          memory: 2GB  # Adjust memory reservation as needed
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  sql_data:
+

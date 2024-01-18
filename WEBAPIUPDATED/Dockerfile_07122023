@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+EXPOSE 80
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
+WORKDIR /src
+COPY ["WebAPIDemo.csproj", "WebAPI/"]
+RUN dotnet restore "WebAPI/WebAPIDemo.csproj"
+COPY . .
+WORKDIR "/src/WebAPI"
+RUN dotnet build "WebAPIDemo.csproj" -c Release -o /app/build
+
+# Copy the remaining source code
+COPY . .
+
+# Build the application
+RUN dotnet publish "WebAPIDemo.csproj" -c Relgase -o /app/publish
+
+# Build the runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/build .
+ENTRYPOINT ["dotnet", "Msbuild.dll"]
+

@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+    <h2>All Blogs</h2>
+    <table border="1" cellpadding="0" cellspacing="0" id="blogs">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Url</th>
+        </tr>
+    </table>
+</div>
+<div>
+    <h2>Search by ID</h2>
+    <input type="text" id="blogId" size="5" />
+    <input type="button" value="SearchBlog" onclick="find();" />
+    <p id="blog" />
+
+    <h1>Add Blog</h1>
+    Id:
+    <input type="text" id="Id" /><br />
+    Name:
+    <input type="text" id="Name" /><br />
+    Url:
+    <input type="text" id="Url" /><br />
+    <input type="button" value="AddBlog" onclick="add();" />
+</div>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        // Send an AJAX request
+        $.ajax({
+            url: 'http://localhost:1312/api/Blog?type=json',
+            type: "GET",
+            data: {},
+            dataType: "json",
+            success: function (result) {
+                // On success, 'data' contains a list of products.
+                var htmlContent = "";
+
+                $.each(result, function (key, item) {
+                    htmlContent = htmlContent + "<tr><td>" + item.Id + "</td><td>" + item.Name + "</td><td>" + item.Url + "</td></tr>";
+                });
+
+                // Appending HTML content
+                $('#blogs').append(htmlContent);
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+    });
+
+    function add() {
+        var Id = $('#Id').val();
+        var Name = $('#Name').val();
+        var Url = $('#Url').val();
+        var blogData = { "Id": Id, "Name": Name, "Url": Url };
+        //blogData = { "blogObj": blogData };
+        alert(JSON.stringify(blogData));
+
+        $.ajax({
+            url: 'http://localhost:1312/api/Blog?type=json',
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(blogData),
+            dataType: "json",
+            success: function (result) {
+                // On success, 'data' contains a list of products.
+                var htmlContent = "";
+
+                $("#blogs > tbody > tr").remove();
+
+                $.each(result, function (key, item) {
+                    htmlContent = htmlContent + "<tr><td>" + item.Id + "</td><td>" + item.Name + "</td><td>" + item.Url + "</td></tr>";
+                });
+
+                // Appending HTML content
+                $('#blogs').append(htmlContent);
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+    }
+
+    function find() {
+        var id = $('#blogId').val();
+        $.getJSON('http://localhost:1312/api/Blog/' + id + '?type=json')
+            .done(function (data) {
+                var htmlContent = "<b>Blog</b>: " + data.Name + "<br/>" + "<b>Url</b>:" + data.Url;
+                $('#blog').html(htmlContent);
+            })
+            .fail(function (jqXHR, textStatus, err) {
+                $('#blog').text('Error: ' + err);
+            });
+    }
+</script>

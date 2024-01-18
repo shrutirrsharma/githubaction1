@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  webapi:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "50306:80"
+
