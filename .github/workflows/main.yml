@@ -1,0 +1,14 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-ons: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: action/checkout@v4
