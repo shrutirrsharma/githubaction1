@@ -28,3 +28,8 @@ jobs:
         run: |
           cd WEBAPIUPDATED\WebAPI
           ls  # List contents to verify you are in the right directory
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
