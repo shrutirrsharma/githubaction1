@@ -57,3 +57,4 @@ jobs:
         run: |
           #copy .net 
           cp -r WEBAPIUPDATED\WebAPI\published\* "D:\AngularWEBapi"
+
