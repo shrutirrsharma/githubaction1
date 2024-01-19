@@ -44,3 +44,10 @@ jobs:
           cd AngularCRUD
           npm run build 
           
+  deploy:
+    needs: build
+    runs-on: windows-latest
+  
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
