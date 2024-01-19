@@ -45,15 +45,15 @@ jobs:
           cd AngularCRUD
           npm run build 
           
-  # deploy:
-  #   needs: build
-  #   runs-on: windows-latest
+  deploy:
+    needs: build
+    runs-on: windows-latest
   
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-  #     - name: Copy file to IIS
-  #       run: |
-  #         #copy .net 
-  #         cp -r WEBAPIUPDATED\WebAPI\published/* "D:\AngularWEBapi"
+      - name: Copy file to IIS
+        run: |
+          #copy .net 
+          cp -r WEBAPIUPDATED\WebAPI\published/* "D:\AngularWEBapi"
