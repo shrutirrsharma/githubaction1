@@ -78,8 +78,12 @@ jobs:
           name: frontend-artifact
           path: AngularCRUD/dist
 
-      # - name: Copy file to IIS
-      #   run: |
-      #     #copy .net 
-      #     cp -r WEBAPIUPDATED\WebAPI\published\* "D:\AngularWEBapi"
+      - name: Copy file to IIS
+        run: |
+          #copy .net 
+          cp -r WEBAPIUPDATED\WebAPI\published\* "D:\AngularWEBapi"
+
+      - name: Copy Agular Frontend to IIS
+        run: |
+          cp -r AngularCRUD/dist/* "D:\AngularWEBapi"
 
