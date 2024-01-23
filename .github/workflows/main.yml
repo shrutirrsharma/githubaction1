@@ -82,7 +82,7 @@ jobs:
         run: |
           #copy .net 
           #cp -r WEBAPIUPDATED\WebAPI\published\* "D:\AngularWEBapi"
-          Copy-Item -Path "$env:GITHUB_WORKSPACE\WEBAPIUPDATED\WebAPI\published\*" -Destination "D:\AngularWEBapi" -Recurse -Froce
+          Copy-Item -Path "$env:GITHUB_WORKSPACE\WEBAPIUPDATED\WebAPI\published\*" -Destination "D:\AngularWEBapi" -Recurse -Force
 
       # - name: Copy Agular Frontend to IIS
       #   run: |
