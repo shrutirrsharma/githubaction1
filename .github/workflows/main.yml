@@ -78,13 +78,22 @@ jobs:
           name: frontend-artifact
           path: AngularCRUD/dist
 
-      - name: Copy file to IIS
+      # - name: Copy file to IIS
+      #   run: |
+      #     #copy .net 
+      #     #cp -r WEBAPIUPDATED\WebAPI\published\* "D:\AngularWEBapi"
+      #     Copy-Item -Path "$env:GITHUB_WORKSPACE\WEBAPIUPDATED\WebAPI\published\*" -Destination "D:\AngularWEBapi" -Recurse -Force
+          
+      #     # Copy Angular Frontend
+      #     Copy-Item -Path "$env:GITHUB_WORKSPACE\AngularCRUD\dist\*" -Destination "D:\AngularWebAPI" -Recurse -Force
+
+      - name: Debugging
         run: |
-          #copy .net 
-          #cp -r WEBAPIUPDATED\WebAPI\published\* "D:\AngularWEBapi"
-          Copy-Item -Path "$env:GITHUB_WORKSPACE\WEBAPIUPDATED\WebAPI\published\*" -Destination "D:\AngularWEBapi" -Recurse -Force
-           # Copy Angular Frontend
-          Copy-Item -Path "$env:GITHUB_WORKSPACE\AngularCRUD\dist\*" -Destination "D:\AngularWebAPI" -Recurse -Force
+           Write-Host "Listing contents of backend artifact:"
+           Get-ChildItem -Path "$env:GITHUB_WORKSPACE\WEBAPIUPDATED\WebAPI\published" -Recurse
+
+           Write-Host "Listing contents of frontend artifact:"
+           Get-ChildItem -Path "$env:GITHUB_WORKSPACE\AngularCRUD\dist" -Recurse
           
       # - name: Copy Agular Frontend to IIS
       #   run: |
