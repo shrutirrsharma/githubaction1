@@ -1,0 +1,64 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install Dependencies
+        run: |
+          cd AngularCRUD
+          npm install
+
+      - name: Build and Test Angular Frontend
+        run: |
+          cd AngularCRUD
+          npm run build 
+
+      - name: Upload Frontend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-artifact
+          path: AngularCRUD/dist
+          
+  deploy:
+    needs: build
+    runs-on: self-hosted
+  
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Download Frontend Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-artifact
+          path: AngularCRUD/dist
+
+      - name: Debugging
+        run: |
+           
+           Write-Host "Listing contents of frontend artifact:"
+           Get-ChildItem -Path "$env:GITHUB_WORKSPACE\AngularCRUD\dist" -Recurse
+
+      - name: Copy frontend to IIS
+        run: |
+          Write-Host "Copying frontend to D:\AngularWebAPI"
+          Copy-Item -Path "$env:GITHUB_WORKSPACE\AngularCRUD\dist\*" -Destination "D:\angular" -Recurse -Force
+         
