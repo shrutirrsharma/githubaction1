@@ -61,7 +61,7 @@ jobs:
       - name: Copy backend to IIS
         run: |
           Write-Host "Copying backend to D:\AngularWEBapi"
-          Copy-Item -Path "$env:GITHUB_WORKSPACE\WEBAPIUPDATED\WebAPI\published\*" -Destination "D:\AngularWEBapi" -Recurse -Force
+          Copy-Item -Path "$env:GITHUB_WORKSPACE\WEBAPIUPDATED\WebAPI\published\*" -Destination "D:\webapi" -Recurse -Force
 
 
     
